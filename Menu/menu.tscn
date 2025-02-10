@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3 uid="uid://bces5dtrka34j"]
+
+[ext_resource type="Script" path="res://Menu/menu.gd" id="1_1cmty"]
+
+[node name="Control" type="Node2D"]
+script = ExtResource("1_1cmty")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_right = 104.0
+offset_bottom = 128.0
+
+[node name="SpaceId" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "SpaceID"
+alignment = 1
+
+[node name="Token" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Token"
+alignment = 1
+
+[node name="JoinButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+
+[connection signal="join_space_requested" from="." to="." method="_on_join_space_requested"]
+[connection signal="pressed" from="VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
