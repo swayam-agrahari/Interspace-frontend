@@ -85,33 +85,8 @@
 	</style>
 	<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 	<link rel="apple-touch-icon" href="index.apple-touch-icon.png" />
-	<script>
-		// Define the function in the global scope
-		window.get_url_params = function () {
-			const params = new URLSearchParams(window.location.search);
-			const result = {};
-			for (const [key, value] of params.entries()) {
-				result[key] = value;
-			}
-			return result;
-		}
-
-		// Register with Godot as soon as possible
-		if (typeof window.Godot !== 'undefined') {
-			window.Godot.requestAnimationFrame = requestAnimationFrame;
-			Godot.JS.register_method('get_url_params', window.get_url_params);
-		}
-
-		// Also register when Godot loads (as a backup)
-		window.addEventListener('load', function () {
-			if (typeof window.Godot !== 'undefined') {
-				Godot.JS.register_method('get_url_params', window.get_url_params);
-			}
-		});
-	</script>
 
 </head>
-
 
 <body>
 	<canvas id="canvas">
@@ -130,7 +105,30 @@
 
 	<script src="index.js"></script>
 	<script>
-		const GODOT_CONFIG = { "args": [], "canvasResizePolicy": 2, "ensureCrossOriginIsolationHeaders": true, "executable": "index", "experimentalVK": false, "fileSizes": { "index.pck": 2497488, "index.wasm": 43016933 }, "focusCanvas": true, "gdextensionLibs": [] };
+		// Make the function globally available
+		window.get_url_params = function () {
+			const params = new URLSearchParams(window.location.search);
+			const result = {};
+			for (const [key, value] of params.entries()) {
+				result[key] = value;
+			}
+			return result;
+		}
+
+		// Wait for engine to be ready
+		engine.startGame().then(() => {
+			// Now register the method
+			const Godot = window.engine.godot;
+			if (Godot && Godot.JS) {
+				Godot.JS.register_method('get_url_params', window.get_url_params);
+				console.log("Successfully registered get_url_params method");
+			} else {
+				console.error("Godot.JS not available");
+			}
+		});
+	</script>
+	<script>
+		const GODOT_CONFIG = { "args": [], "canvasResizePolicy": 2, "ensureCrossOriginIsolationHeaders": true, "executable": "index", "experimentalVK": false, "fileSizes": { "index.pck": 2497728, "index.wasm": 43016933 }, "focusCanvas": true, "gdextensionLibs": [] };
 		const GODOT_THREADS_ENABLED = false;
 		const engine = new Engine(GODOT_CONFIG);
 
