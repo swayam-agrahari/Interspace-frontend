@@ -202,28 +202,7 @@
 			}
 		}());
 	</script>
-	<script>
-		window.get_url_params = function () {
-			const params = new URLSearchParams(window.location.search);
-			const result = {};
-			for (const [key, value] of params.entries()) {
-				result[key] = value;
-			}
-			return result;
-		};
 
-		// Wait for engine to be fully initialized
-		const waitForGodot = setInterval(() => {
-			if (window.engine && window.engine.godot) {
-				clearInterval(waitForGodot);
-				const Godot = window.engine.godot;
-				if (Godot && Godot.JS) {
-					Godot.JS.register_method('get_url_params', window.get_url_params);
-					console.log("Successfully registered get_url_params method");
-				}
-			}
-		}, 100);
-	</script>
 </body>
 
 </html>
