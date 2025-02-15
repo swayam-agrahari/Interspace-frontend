@@ -1,35 +1,48 @@
 # Main.gd
 extends Node
 
-var menu_scene = preload("res://Menu/menu.tscn")
 var world_scene = preload("res://World/world.tscn")
 
-
 func _on_play_pressed():
-	# Instance the menu
-	var menu_instance = menu_scene.instantiate()
-	add_child(menu_instance)
-	# Make sure we're connecting to the correct type
-	if menu_instance.has_signal("join_space_requested"):
-		menu_instance.join_space_requested.connect(handle_menu_join)
+	# Configure the dialog for both space ID and token input
+	ConfirmationDialogJsLoader.set_snippet_content(
+		false,  # textarea_readonly
+		"",     # textarea_text
+		"Space ID\nToken",  # textarea_placeholder
+		"Enter Space Details",  # title_text
+		"Please paste your Space ID on the first line and Token on the second line",  # subtitle_text
+		"Join",  # accept_button_text
+		"Cancel"   # cancel_button_text
+	)
+	
+	# Show dialog and wait for result
+	var result = await ConfirmationDialogJsLoader.eval_snippet(self)
+	if result != "":
+		# Split the result into space_id and token
+		var lines = result.split("\n", false)
+		if lines.size() >= 2:
+			var space_id = lines[0].strip_edges()
+			var token = lines[1].strip_edges()
+			
+			if space_id != "" and token != "":
+				handle_join(space_id, token)
+			else:
+				print("Invalid input: Please provide both Space ID and Token")
+		else:
+			print("Invalid input format: Please provide both Space ID and Token")
 	else:
-		print("Error: Menu scene doesn't have join_space_requested signal")
-	# Hide the play/quit buttons
-	$Play.hide()
-	$Quit.hide()
+		# User canceled
+		$Play.show()
+		$Quit.show()
 
-func handle_menu_join(space_id: String, token: String):
-	# Remove menu
-	for child in get_children():
-		if child is Control and child != $Play and child != $Quit:
-			child.queue_free()
+func handle_join(space_id: String, token: String):
 	# Instance world
 	var world_instance = world_scene.instantiate()
 	add_child(world_instance)
-	var network = world_instance.get_node("Network") # Ensure this is the correct path
+	var network = world_instance.get_node("Network")
 	if network:
 		print("Network node found!")
-		network.join_space(space_id, token)  # This should work if the path is correct
+		network.join_space(space_id, token)
 	else:
 		print("Error: Network node not found!")
 

@@ -30,6 +30,11 @@ window/stretch/mode="canvas_items"
 [editor]
 
 run/main_run_args="host"
+script/templates_search_path="res://snippets/js/*"
+
+[filesystem]
+
+import/fbx2gltf/enabled.web=true
 
 [layer_names]
 

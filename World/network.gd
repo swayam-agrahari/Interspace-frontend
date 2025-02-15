@@ -18,7 +18,8 @@ func _ready():
 	# Connect to the WebSocket server
 
 	
-	websocket_client.connect_to_url("ws://4.240.40.227/ws/")	
+	# Update the connection URL to include wss://
+	websocket_client.connect_to_url("wss://swayamagrahari.com.np/ws")
 
 	# Connect signals to methods
 	websocket_client.connect("connected_to_server", Callable(self, "_on_connected_to_server"))
@@ -39,6 +40,7 @@ func _on_connected_to_server():
 	
 
 func _on_connection_closed():
+	
 	print("Connection to WebSocket server closed.")
 
 
