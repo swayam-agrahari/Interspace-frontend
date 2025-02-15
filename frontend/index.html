@@ -104,29 +104,7 @@
 	</div>
 
 	<script src="index.js"></script>
-	<script>
-		// Make the function globally available
-		window.get_url_params = function () {
-			const params = new URLSearchParams(window.location.search);
-			const result = {};
-			for (const [key, value] of params.entries()) {
-				result[key] = value;
-			}
-			return result;
-		}
 
-		// Wait for engine to be ready
-		engine.startGame().then(() => {
-			// Now register the method
-			const Godot = window.engine.godot;
-			if (Godot && Godot.JS) {
-				Godot.JS.register_method('get_url_params', window.get_url_params);
-				console.log("Successfully registered get_url_params method");
-			} else {
-				console.error("Godot.JS not available");
-			}
-		});
-	</script>
 	<script>
 		const GODOT_CONFIG = { "args": [], "canvasResizePolicy": 2, "ensureCrossOriginIsolationHeaders": true, "executable": "index", "experimentalVK": false, "fileSizes": { "index.pck": 2497728, "index.wasm": 43016933 }, "focusCanvas": true, "gdextensionLibs": [] };
 		const GODOT_THREADS_ENABLED = false;
@@ -224,6 +202,29 @@
 				}, displayFailureNotice);
 			}
 		}());
+	</script>
+	<script>
+		// Make the function globally available
+		window.get_url_params = function () {
+			const params = new URLSearchParams(window.location.search);
+			const result = {};
+			for (const [key, value] of params.entries()) {
+				result[key] = value;
+			}
+			return result;
+		}
+
+		// Wait for engine to be ready
+		engine.startGame().then(() => {
+			// Now register the method
+			const Godot = window.engine.godot;
+			if (Godot && Godot.JS) {
+				Godot.JS.register_method('get_url_params', window.get_url_params);
+				console.log("Successfully registered get_url_params method");
+			} else {
+				console.error("Godot.JS not available");
+			}
+		});
 	</script>
 </body>
 
